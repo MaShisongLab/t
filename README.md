@@ -123,15 +123,29 @@ Conduct the following analysis within a MATLAB console.
 %navigate to and start within the root directory of the explicit package
 mtx_demo = h5read("At.matrix.demo.h5","/expression_log2cpm");
 gene_name = h5read("At.matrix.demo.h5","/gene_name");
-itf = h5read("At.matrix.demo.h5","/idx_tf_gene") == 1; 		% which of the 38194 genes are TFs to be used
-itarget = h5read("At.matrix.demo.h5","/idx_target_gene") == 1; 	% target genes to be used
-tf_mtx_demo = mtx_demo(:,itf); 								% obtain the TF expression matrix
-target_mtx_demo = mtx_demo(:,itarget); 						% obtain the target gene expression matrix
+
+% which of the 38194 genes are TFs to be used
+itf = h5read("At.matrix.demo.h5","/idx_tf_gene") == 1; 	
+
+% target genes to be used
+itarget = h5read("At.matrix.demo.h5","/idx_target_gene") == 1; 	
+
+% obtain the TF expression matrix
+tf_mtx_demo = mtx_demo(:,itf); 		
+
+% obtain the target gene expression matrix
+target_mtx_demo = mtx_demo(:,itarget); 				
 tf_name = gene_name(itf);
 target_name = gene_name(itarget);
-mdl_demo = explicit( tf_mtx_demo, target_mtx_demo, tf_name, target_name); % this produces the predictor model
-mdl_demo 					% A look into the predictor model
-mdl_demo.SigEdges(1:5,:)  % The first 5 significant TF-target gene pairs
+
+% this produces the predictor model
+mdl_demo = explicit( tf_mtx_demo, target_mtx_demo, tf_name, target_name);
+
+% A look into the predictor model
+mdl_demo 	
+
+% The first 5 significant TF-target gene pairs
+mdl_demo.SigEdges(1:5,:)  
 ```
 
 The output is:
@@ -140,15 +154,15 @@ mdl_demo =
 
   explicit with properties:
 
-                          beta: [1679x29182 double] % beta coefficients (1 intercept + 1678 TFs) X 29182 genes
-                   beta_pvalue: [1679x29182 double] % pValues for the beta coefficiets
-                       TF_name: [1x1679 string]     % names for 1 intercept + 1678 TFs
-                   Target_name: [1x29182 string]    % names for 29182 gene
-                         NRMSE: 0.0660				% NRMSE for all the training samples
+                          beta: [1679x29182 double] 	% beta coefficients (1 intercept + 1678 TFs) X 29182 genes
+                   beta_pvalue: [1679x29182 double] 	% pValues for the beta coefficiets
+                       TF_name: [1x1679 string]     	% names for 1 intercept + 1678 TFs
+                   Target_name: [1x29182 string]    	% names for 29182 gene
+                         NRMSE: 0.0660			% NRMSE for all the training samples
          Correlation_by_sample: [5000x1 double]		% R of predicted &acutal expression for 5000 samples
-    Correlation_by_target_gene: [29182x1 double]    % R of predicted & actuall exp of each gene across all samples
-                           SST: [29182x1 double]    % SST for regression model of every gene
-                           SSR: [29182x1 double]    % SSR for regression model of every gene
+    Correlation_by_target_gene: [29182x1 double]    	% R of predicted & actuall exp of each gene across all samples
+                           SST: [29182x1 double]    	% SST for regression model of every gene
+                           SSR: [29182x1 double]    	% SSR for regression model of every gene
                            SSE: [29182x1 double]	% SSE for regression model of every gene
                          Fstat: [29182x1 double]	% Fstat for regression model of every gene
                        Fpvalue: [29182x1 double]	% Fpvalue for regression model of every gene
