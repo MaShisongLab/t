@@ -63,7 +63,7 @@ perl getChordLists.pl Module0105
 For other module, just replace `Module0105` with the name of that module.
 
 #### b. Draw the chord diagram according to the chord-list in R
-The function `drawChordDiagram` in R will be used to draw the chord diagram. It has two inputs: `chordfile` specifyies the name of the chord-list file, `ratio` specifies the relative size of target gene area occupies. The function requires the `circlize` package. <br><br>
+The function `drawChordDiagram` will be used to draw the chord diagram in R. It has two inputs: `chordfile` specifyies the name of the chord-list file, `ratio` specifies the relative size of target gene area occupies. The function requires the `circlize` package. <br><br>
 Open an R console and navigate to the home directory of the explicit package, which contains the `chord.lists.txt` file. Within the R console, type the following commands:
 ```R
 source("Rscripts.R")   # Contains scripts for the drawChordDiagram function.
@@ -71,10 +71,10 @@ library("circlize")
 drawChordDiagram(chordfile = "chord.lists.txt", ratio = 1)
 drawChordDiagram(chordfile = "chord.lists.txt", ratio = 0.6)
 ```
-Repeat step <b>a</b> and <b>b</b> to draw diagrams for another module.
+Repeat step <b>a</b> and <b>b</b> to draw diagrams for other modules.
 
 #### c. Use a single command in R to draw the diagram
-You can directly issue the following commands within an R console to draw Chord diagrams for modules:
+The function `directChordDiagram` can also be used to draw chord digrams via a single command.
 ```R
 source("Rscripts.R")  
 library("circlize")
