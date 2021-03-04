@@ -131,7 +131,7 @@ At.matrix.full.h5
 ```
 #### b. Create the expression predictor
 Conduct the following analysis within a MATLAB console.
-```m
+```matlab
 %navigate to and start within the root directory of the explicit package
 mtx_demo = h5read("At.matrix.demo.h5","/expression_log2cpm");
 gene_name = h5read("At.matrix.demo.h5","/gene_name");
