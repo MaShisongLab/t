@@ -31,7 +31,7 @@ Once the required software is installed, just download or clone the whole packag
 ### 1. Infer TF regulators for gene modules
 
 #### a. Prepare the module file
-The file used to store gene modules information is "`modules_to_analyze.txt`". It is preloaded with 1,085 gene modules identified from a GGM gene co-expression network described in the paper by [Geng et al.](https://github.com/MaShisongLab/explicit#Reference). The following analysis will proceed with these preloaded modules. On the other hand, you can also edit the file, replacing these modules with your own ones. The file has the following format, with the first column being gene ids and the second column being module names. The two columns are separated by a tab. For gene ids, only standard Arabidopsis AGI ids are currently supported. Multiple modules can be analyzed at the same time. <i>Once finished editing, save the file without changing its name</i>.
+The file used to store gene modules information is "`modules_to_analyze.txt`". It is preloaded with 1,085 gene modules identified from a GGM gene co-expression network described in the paper by [Geng et al.](https://github.com/MaShisongLab/explicit#Reference). The following analysis will proceed with these preloaded modules. On the other hand, you can also edit the file, replacing these modules with your own ones. The file has the following format, with the first column being gene ids and the second column being module names. The two columns are separated by a tab. For gene ids, only standard Arabidopsis AGI ids are currently supported. Multiple modules can be analyzed at the same time. <i>Once finish editing, save the file without changing its name</i>.
 ```
 Gene_Name   ModuleID
 AT1G25360   Module138
@@ -56,9 +56,14 @@ Here is an example of the output results:
 #### a. Obtain the chord-list file for a module of interest
 The Perl script "`getChordLists.pl`" will extract the TF-target gene pairs from the "`results.regulator.tfs.txt`" for the module specified. By default, it will take the top 50 TFs and top 15 target genes. The results are outputted to a file named "`chord.lists.txt`", which will be used in the next step to draw a chord diagram. 
 ```shell
-perl getChordLists.pl XXXXX
+# The command line format is :    
+#    perl getChordLists.pl XXXXXX
+# replace XXXXXX with the name of a module.
+# For example, to extract chord-list file for Module0105
+perl getChordLists.pl Module0105
 ```
-Replace `XXXXX` with the name of the module.
+For other module, just replace `Module0105` with the name of that module.
+
 #### b. Draw the chord diagram according to the chord-list in R, using the `circlize` package
 The `circlize` package in R will be used to draw the chord diagram showing the TF-target genes interaction, as specified in the "`chord.lists.txt`". Open an R console and navigate to the home directory of the explicit package, which contains the "`chord.lists.txt`" file. Within the R console, type the following commands:
 ```R
@@ -67,14 +72,21 @@ library("circlize")
 drawChordDiagram(chordfile = "chord.lists.txt", ratio = 1)
 drawChordDiagram(chordfile = "chord.lists.txt", ratio = 0.6)
 ```
-`ratio` specifies the relative size of the target gene area occupies. You can repeat step a and b to draw diagrams for another module.
+`ratio` specifies the relative size of the target gene area occupies. You can repeat step <b>a</b> and <b>b</b> to draw diagrams for another module.
 
 #### c. Use a single command in R to draw the diagram
 One can also directly issue the following command within a R console to draw a Chord diagram for a module:
 ```R
 source("Rscripts.R")
 library("circlize")
-directChordDiagram( module="XXXXX", ratio = 1, tfnum = 50, targetnum = 15)
+
+# For Module0105
+directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
+
+# For other modules
+directChordDiagram( module="Module0084", ratio = 1, tfnum = 50, targetnum = 15)
+directChordDiagram( module="Module0081", ratio = 1, tfnum = 50, targetnum = 15)
+directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
 ```
 `tfnum` and `targetnum` specify, respectively, the maximum number of TFs and target genes to be included within the chord Diagram.
 
