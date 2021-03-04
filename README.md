@@ -96,22 +96,22 @@ Here is a detailed procedure to create the Arabidopsis predictor.
 Download two matrices `At.matrix.demo.h5` and `At.matrix.full.h5` from [Figshare](https://figshare.com/s/0c838ad4ef6a764daf53) (https://figshare.com/s/0c838ad4ef6a764daf53) , and place them within the <b>root directory of the EXPLICIT package </b>. `At.matrix.full.h5` is a full matrix with 24545 samples, while `At.matrix.demo.h5` has 5000 randomly selected samples from the full matrix. <i>We recommend to work with the smaller matrix `At.matrix.demon.h5` first</i>, as it requires less computational resources. Both are hdf5 format files with the following data structure: 
 ```bash
 At.matrix.demo.h5
-├─expression_log2cpm  	(5000 samples [row] X 38194 genes [column])
-├─gene_name				(38194 genes)
-├─rnaseq_id				(5000 samples)
+├─expression_log2cpm  		(5000 samples [row] X 38194 genes [column])
+├─gene_name			(38194 genes)
+├─rnaseq_id			(5000 samples)
 ├─idx_tf_gene			(specifying TF genes used for model construction)
 ├─idx_target_gene 		(specifying target genes used for model construction)
 └─independent_samples_for_validation
-   ├───expression_log2cpm  (2 samples [row] X 39184 genes [column])
+   ├───expression_log2cpm  	(2 samples [row] X 39184 genes [column])
    ├───gene_name		(38194 genes)
    └───sample_id		(2 samples)
    
 At.matrix.full.h5
-├─expression_log2cpm  	(24545 samples [row] X 38194 genes [column])
-├─gene_name				(38194 genes)
-├─rnaseq_id				(24545 samples)
+├─expression_log2cpm  		(24545 samples [row] X 38194 genes [column])
+├─gene_name			(38194 genes)
+├─rnaseq_id			(24545 samples)
 ├─idx_tf_gene			(specifying TF genes used for model construction)
-├─idx_target_gene (specifying target genes used for model construction)
+├─idx_target_gene 		(specifying target genes used for model construction)
 └─independent_samples_for_validation
    ├───expression_log2cpm  (2 samples [row] X 38194 genes [column])
    ├───gene_name		(38194 genes)
@@ -276,7 +276,7 @@ mdl_kfcv.CV_Stat =
       2          3          0.063617        0.12701       0.99586      0.98347
       2          4           0.06349        0.12768       0.99588      0.98357
       2          5           0.06351        0.13197       0.99587      0.98255
-	...			...			...				...				...			...
+     ...	...		...	       ...	     ...	  ...
 
 mdl_kfcv.AllEdges(1:5,:) =
      Gene            TF          beta      beta_pvalue    CV_beta_mean    CV_beta_std    beta_bias    beta_relative_bias    relative_std
@@ -352,15 +352,16 @@ tf_mtx_full = mtx_full(:,itf);
 target_mtx_full = mtx_full(:,itarget);                      
 tf_name = gene_name(itf);
 target_name = gene_name(itarget);
-mdl_full = explicit( tf_mtx_full, target_mtx_full, tf_name, target_name); % this produces the predictor model.
+
+% this produces the predictor model.
+mdl_full = explicit( tf_mtx_full, target_mtx_full, tf_name, target_name); 
 mdl_full    
 
 % The predictor has 3298936  SigEdges (TF-target gene pairs) with pValue <= 0.00001
 % Next the SigEdges with pValue <= 1e-9 are extracted and saved to a file named "Arabidopsis.SigEdges.1e-9.txt". 
 % This file is the same as the file "At.SigEdges.txt" within the data directory.
-i = mdl_full.SigEdges{:,4} <= 1e-9 ;
-
 % There are 980736 SigEdges with pValue <= 1e-9
+i = mdl_full.SigEdges{:,4} <= 1e-9 ;
 sum(i)       
 writetable( mdl_full.SigEdges(i,:), "Arabidopsis.SigEdges.1e-9.txt", "Delimiter","tab")
 
