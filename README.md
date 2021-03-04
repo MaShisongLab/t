@@ -63,7 +63,7 @@ perl getChordLists.pl Module0105
 For other module, just replace `Module0105` with the name of that module.
 
 #### b. Draw the chord diagram according to the chord-list in R
-The function `drawChordDiagram (chordfile, ratio)` in R will be used to draw the chord diagram showing the TF-target genes interaction. It has two inputs: `chordfile` specifyies the name of chord-list file, `ratio` specifies the relative size of target gene area occupies. The function requires the `circlize` package. <br><br>
+The function `drawChordDiagram` in R will be used to draw the chord diagram. It has two inputs: `chordfile` specifyies the name of the chord-list file, `ratio` specifies the relative size of target gene area occupies. The function requires the `circlize` package. <br><br>
 Open an R console and navigate to the home directory of the explicit package, which contains the `chord.lists.txt` file. Within the R console, type the following commands:
 ```R
 source("Rscripts.R")   # Contains scripts for the drawChordDiagram function.
@@ -71,15 +71,15 @@ library("circlize")
 drawChordDiagram(chordfile = "chord.lists.txt", ratio = 1)
 drawChordDiagram(chordfile = "chord.lists.txt", ratio = 0.6)
 ```
-`ratio` specifies the relative size of the target gene area occupies. You can repeat step <b>a</b> and <b>b</b> to draw diagrams for another module.
+Repeat step <b>a</b> and <b>b</b> to draw diagrams for another module.
 
 #### c. Use a single command in R to draw the diagram
-One can also directly issue the following command within a R console to draw a Chord diagram for a module:
+You can directly issue the following commands within an R console to draw Chord diagrams for modules:
 ```R
-source("Rscripts.R")
+source("Rscripts.R")  
 library("circlize")
 
-# For Module0105
+# To draw diagram for Module0105
 directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
 
 # For other modules
