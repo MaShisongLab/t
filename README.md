@@ -192,7 +192,7 @@ mdl_demo.SigEdges(1:5,:) =
 ```
 #### c. Use the predictor model to predict independent samples
 We have generated two indepdent RNA-Seq datasets from Arabidopsis shoot and root samples. These two datasets were not used in the model training. Below we see how well the predictor model predict these two samples. <i>Note: the order of the gene names within the test samples are the same as those within demo matrix. </i> 
-```m
+```matlab
 test_mtx = h5read("At.matrix.demo.h5","/independent_samples_for_validation/expression_log2cpm");
 
 % test_mtx contains two rows, for 'root' and 'shoot' samples, respetively.
@@ -217,7 +217,7 @@ NRMSE = sqrt(sum(residual_mtx.^2, 2) ./ sum( actual_target_mtx.^2, 2))
 
 #### d. Investigate how the number of training samples affects the predictor power
 The number of training samples affects the predictor's predicting power. The function <b>`explicit_eosn`</b>, standing for effect of sample number, investigates such effects. Its inputs are `(TF_expression, Target_expression, TestSampleNum)`, with `TestSampleNum` being the number of samples randomly selected  and hold out as test samples.
-```m
+```matlab
 % hold out 500 samples as test samples.
 mdl_eosn = explicit_eosn( tf_mtx_demo, target_mtx_demo, 500) 
 mdl_eosn
@@ -250,7 +250,7 @@ The output is:
 Eighteen predictor models were built with between 1700 and 4500 training samples, and the predicting accuracy on test samples (R_test) increased along with the number of training samples.
 #### e. Perform K-fold Cross-Validation
 K-fold Cross-Validation can be also used to test the predictor's performance. The function <b>`explicit_kfcv`</b> does the job. Its inputs are `(TF_expression, Target_expression, tf_name, target_name, repeats, folds)`, with `repeats` and `folds` being the number of repeats and the folds for the analysis.
-```m
+```matlab
 mdl_kfcv = explicit_kfcv(tf_mtx_demo, target_mtx_demo, tf_name, target_name, 5, 10) % 5 repeats of 10-fold CV
 mdl_kfcv
 mdl_kfcv.CV_Stat
@@ -304,7 +304,7 @@ mdl_kfcv.AllEdges(1:5,:) =
 `mdl_kfcv.AllEdges` can be used to check if any of the coefficient is stable or not across the CV runs.
 #### f. Perform Cross-Validation on independent samples
 The function <b>`explicit_cv`</b> can be used to conduct Cross-Validation. Its inputs are `(Training_TF_expression, Training_traget_expression, Test_TF_expression, Test_target_expression, Test_sample_ids)`. The function uses Training TF and target expression matrices to build the predictor model, and then test the model on the Test samples. It provides a convinient way to test different models, which are specified by different input training samples.
-```m
+```matlab
 test_target_mtx = test_mtx(:,itarget);
 
 % Use all 5000 samples in the demo matrix to build the preidctor model, 
@@ -342,7 +342,7 @@ mdl_cv_5000.Test_Sample_Stat =
 When using 5000, 4000, 3000, or 2000 samples to train the predictor model, the mean correlation for test samples are 0.9910, 0.9891, 0.9841, 0.9572, respetively.
 #### g. Use the full matrix to perform the analysis
 Next we will analyze the full matrix. <i>Note: Since the matrix is large, it requires a large amount of computational resource. It is recommended to have at least 80G memory available.</i>
-```m
+```matlab
 % clear all previous variables to free memory usage.
 clearvars ; 
 
