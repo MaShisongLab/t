@@ -31,7 +31,7 @@ Once the required software is installed, just download or clone the whole packag
 ### 1. Infer TF regulators for gene modules
 
 #### a. Prepare the module file
-The file used to store gene modules information is "modules_to_analyze.txt". Edit the file with your own modules. The file has the following format, with the first column being gene ids and the second column being module names. The two columns are separated by a tab. For gene ids, only standard Arabidopsis AGI ids are currently supported. Multiple modules can be analyzed at the same time. Once finished editing, save the file without changing its name.
+The file used to store gene modules information is "`modules_to_analyze.txt`". It is preloaded with 1,085 gene modules identified from a GGM gene co-expression network described in the paper by [Geng et al.](https://github.com/MaShisongLab/explicit#Reference). The following analysis will proceed with these preloaded modules. On the other hand, you can also edit the file, replacing these modules with your own ones. The file has the following format, with the first column being gene ids and the second column being module names. The two columns are separated by a tab. For gene ids, only standard Arabidopsis AGI ids are currently supported. Multiple modules can be analyzed at the same time. <i>Once finished editing, save the file without changing its name</i>.
 ```
 Gene_Name   ModuleID
 AT1G25360   Module138
@@ -42,7 +42,7 @@ AT4G12350   Module139
 .........   ........
 ```
 #### b. Conduct enrichment assay to identify TF regulators for the modules
-The Perl script "getArabidopsisRegulatorTFs.pl" will do the job. It takes the modules from the file "modules_to_analyze.txt" to conduct an enrichment assay to identify potential TF regulators. Results are outputted to a file named "results.regulator.tfs.txt", which can be open in EXCEL.
+The Perl script "`getArabidopsisRegulatorTFs.pl`" will do the job. It takes the modules from the file "`modules_to_analyze.txt`" to conduct an enrichment assay to identify potential TF regulators. Results are outputted to a file named "`results.regulator.tfs.txt`", which can be open in EXCEL.
 
 The command to use:
 ```shell
@@ -54,13 +54,13 @@ Here is an example of the output results:
 
 ### 2. Draw chord diagrams showing TF-target genes regulation for the modules
 #### a. Obtain the chord-list file for a module of interest
-The Perl script "getChordLists.pl" will extract the TF-target gene pairs from the "results.regulator.tfs.txt" for the module specified. By default, it will take the top 50 TFs and top 15 target genes. The results are outputted to a file named "chord.lists.txt", which will be used in the next step to draw a chord diagram. 
+The Perl script "`getChordLists.pl`" will extract the TF-target gene pairs from the "`results.regulator.tfs.txt`" for the module specified. By default, it will take the top 50 TFs and top 15 target genes. The results are outputted to a file named "`chord.lists.txt`", which will be used in the next step to draw a chord diagram. 
 ```shell
 perl getChordLists.pl XXXXX
 ```
 Replace `XXXXX` with the name of the module.
 #### b. Draw the chord diagram according to the chord-list in R, using the `circlize` package
-The `circlize` package in R will be used to draw the chord diagram showing the TF-target genes interaction, as specified in the "chord.lists.txt". Open an R console and navigate to the home directory of the explicit package, which contains the "chord.lists.txt" file. Within the R console, type the following commands:
+The `circlize` package in R will be used to draw the chord diagram showing the TF-target genes interaction, as specified in the "`chord.lists.txt`". Open an R console and navigate to the home directory of the explicit package, which contains the "`chord.lists.txt`" file. Within the R console, type the following commands:
 ```R
 source("Rscripts.R")
 library("circlize")
