@@ -132,24 +132,25 @@ At.matrix.full.h5
 Conduct the following analysis within a MATLAB console.
 ```matlab
 %navigate to and start within the root directory of the explicit package
+% obtain the expression matrix and names for all genes 
 mtx_demo = h5read("At.matrix.demo.h5","/expression_log2cpm");
 gene_name = h5read("At.matrix.demo.h5","/gene_name");
 
 % which of the 38194 genes are TFs to be used
 itf = h5read("At.matrix.demo.h5","/idx_tf_gene") == 1; 	
 
-% target genes to be used
+% which of the 38194 genes are target genes to be used
 itarget = h5read("At.matrix.demo.h5","/idx_target_gene") == 1; 	
 
-% obtain the TF expression matrix
+% obtain the TF expression matrix, target gene expression matrix
 tf_mtx_demo = mtx_demo(:,itf); 		
+target_mtx_demo = mtx_demo(:,itarget); 		
 
-% obtain the target gene expression matrix
-target_mtx_demo = mtx_demo(:,itarget); 				
+% obatain the TF gene names and target gene names
 tf_name = gene_name(itf);
 target_name = gene_name(itarget);
 
-% this produces the predictor model
+% produce the predictor model
 mdl_demo = explicit( tf_mtx_demo, target_mtx_demo, tf_name, target_name);
 
 % A look into the predictor model
@@ -192,15 +193,17 @@ mdl_demo.SigEdges(1:5,:) =
 #### c. Use the predictor model to predict independent samples
 We have generated two indepdent RNA-Seq datasets from Arabidopsis shoot and root samples. These two datasets were not used in the model training. Below we see how well the predictor model predict these two samples. <i>Note: the order of the gene names within the test samples are the same as those within demo matrix. </i> 
 ```matlab
+% expression matrix for the test samples
 test_mtx = h5read("At.matrix.demo.h5","/independent_samples_for_validation/expression_log2cpm");
 
 % test_mtx contains two rows, for 'root' and 'shoot' samples, respetively.
 test_sample_id = h5read("At.matrix.demo.h5","/independent_samples_for_validation/sample_id");
+
 test_tf_mtx = test_mtx(:,itf);
 actual_target_mtx = test_mtx(:,itarget);  
 
-% [intercept (values of 1) + TF's expression matrix] X predictor's beta coefficient matrix to
-% generate the predicted expression matrix for the target genes.
+% Predict gene expression via the formula: 
+% predicted expression = [intercept (values of 1) + TF's expression matrix] X beta coefficient matrix
 predicted_target_mtx = [ones(size(test_tf_mtx,1),1) test_tf_mtx] * mdl_demo.beta ;
 
 % calculate the correlation between predicted and actual expression
