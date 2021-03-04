@@ -54,7 +54,7 @@ Here is an example of the output results:
 
 ### 2. Draw chord diagrams showing TF-target genes regulation for the modules
 #### a. Obtain the chord-list file for a module of interest
-The Perl script `getChordLists.pl` will extract the TF-target gene pairs from the `results.regulator.tfs.txt` for the module specified. By default, it will take the top 50 TFs and top 15 target genes. The results are outputted to a file named `chord.lists.txt`, which will be used in the next step to draw a chord diagram. 
+The Perl script `getChordLists.pl` will extract the TF-target gene pairs from the `results.regulator.tfs.txt` for the module specified. The results are outputted to a file named `chord.lists.txt`, which will be used in the next step to draw a chord diagram. 
 ```shell
 # The command line format is :  perl getChordLists.pl XXXXXXX, where XXXXXX is the name of the module.
 # For example, to extract chord-list file for Module0105
