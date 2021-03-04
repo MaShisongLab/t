@@ -182,26 +182,32 @@ mdl_demo.SigEdges(1:5,:) =
 We have generated two indepdent RNA-Seq datasets from Arabidopsis shoot and root samples. These two datasets were not used in the model training. Below we see how well the predictor model predict these two samples. <i>Note: the order of the gene names within the test samples are the same as those within demo matrix. </i> 
 ```m
 test_mtx = h5read("At.matrix.demo.h5","/independent_samples_for_validation/expression_log2cpm");
+
 % test_mtx contains two rows, for 'root' and 'shoot' samples, respetively.
 test_sample_id = h5read("At.matrix.demo.h5","/independent_samples_for_validation/sample_id");
 test_tf_mtx = test_mtx(:,itf);
 actual_target_mtx = test_mtx(:,itarget);  
+
 % [intercept (values of 1) + TF's expression matrix] X predictor's beta coefficient matrix to
 % generate the predicted expression matrix for the target genes.
 predicted_target_mtx = [ones(size(test_tf_mtx,1),1) test_tf_mtx] * mdl_demo.beta ;
+
 % calculate the correlation between predicted and actual expression
 corr( actual_target_mtx(1,:)', predicted_target_mtx(1,:)') % The correlation for root is 0.9920
 corr( actual_target_mtx(2,:)', predicted_target_mtx(2,:)') % The coorelation for shoot is 0.9900
+
 % Calculate NRMSE (Normalized Root Mean Square Error)
+% NRMSE for root & shoot are 0.0858 & 0.1016
 residual_mtx = predicted_target_mtx - actual_target_mtx ;
-sqrt(sum(residual_mtx.^2, 2) ./ sum( actual_target_mtx.^2, 2)) % NRMSE for root & shoot are 0.0858 & 0.1016 
+NRMSE = sqrt(sum(residual_mtx.^2, 2) ./ sum( actual_target_mtx.^2, 2)) 
 ```
 <b>Note: If you want to use your own RNA-Seq datasets to test the model, make sure the gene names matched in the same order to the gene names of the TF and target gene matrices used above, and the gene expression value should be log2 transformed (log2(CPM + 1)). Alternatively, you can arrange the TFs and target genes of the demo matrix with the same order as your RNA-Seq datasets, and create the gene expression predictor accordingly. </b>
 
 #### d. Investigate how the number of training samples affects the predictor power
 The number of training samples affects the predictor's predicting power. The function <b>`explicit_eosn`</b>, standing for effect of sample number, investigates such effects. Its inputs are `(TF_expression, Target_expression, TestSampleNum)`, with `TestSampleNum` being the number of samples randomly selected  and hold out as test samples.
 ```m
-mdl_eosn = explicit_eosn( tf_mtx_demo, target_mtx_demo, 500) % hold out 500 samples as test samples.
+% hold out 500 samples as test samples.
+mdl_eosn = explicit_eosn( tf_mtx_demo, target_mtx_demo, 500) 
 mdl_eosn
 mdl_eosn.stat
 ```
@@ -288,9 +294,11 @@ mdl_kfcv.AllEdges(1:5,:) =
 The function <b>`explicit_cv`</b> can be used to conduct Cross-Validation. Its inputs are `(Training_TF_expression, Training_traget_expression, Test_TF_expression, Test_target_expression, Test_sample_ids)`. The function uses Training TF and target expression matrices to build the predictor model, and then test the model on the Test samples. It provides a convinient way to test different models, which are specified by different input training samples.
 ```m
 test_target_mtx = test_mtx(:,itarget);
+
 % Use all 5000 samples in the demo matrix to build the preidctor model, 
 % and test on the shoot and leaf RNA-Seq samples.
 mdl_cv_5000 = explicit_cv( tf_mtx_demo, target_mtx_demo, test_tf_mtx, test_target_mtx, test_sample_id)
+
 % Use only 4000, 3000, or 2000 samples to build the predictor model
 mdl_cv_4000 = explicit_cv( tf_mtx_demo(1:4000,:), target_mtx_demo(1:4000,:), test_tf_mtx, test_target_mtx, test_sample_id)
 mdl_cv_3000 = explicit_cv( tf_mtx_demo(1:3000,:), target_mtx_demo(1:3000,:), test_tf_mtx, test_target_mtx, test_sample_id)
@@ -326,23 +334,36 @@ Next we will analyze the full matrix. <i>Note: Since the matrix is large, it req
 % clear all previous variables to free memory usage.
 clearvars ; 
 
+
 % Step A. Create the predictor
 mtx_full = h5read("At.matrix.full.h5","/expression_log2cpm");
 gene_name = h5read("At.matrix.full.h5","/gene_name");
-itf = h5read("At.matrix.full.h5","/idx_tf_gene") == 1;      % which of the 31984 genes are TFs to be used
-itarget = h5read("At.matrix.full.h5","/idx_target_gene") == 1;  % target genes to be used
-tf_mtx_full = mtx_full(:,itf);                              % obtain the TF expression matrix
-target_mtx_full = mtx_full(:,itarget);                      % obtain the target gene expression matrix
+
+% which of the 31984 genes are TFs to be used
+itf = h5read("At.matrix.full.h5","/idx_tf_gene") == 1;   
+
+% target genes to be used
+itarget = h5read("At.matrix.full.h5","/idx_target_gene") == 1;  
+
+% obtain the TF expression matrix
+tf_mtx_full = mtx_full(:,itf);    
+
+% obtain the target gene expression matrix
+target_mtx_full = mtx_full(:,itarget);                      
 tf_name = gene_name(itf);
 target_name = gene_name(itarget);
 mdl_full = explicit( tf_mtx_full, target_mtx_full, tf_name, target_name); % this produces the predictor model.
-mdl_full      
+mdl_full    
+
 % The predictor has 3298936  SigEdges (TF-target gene pairs) with pValue <= 0.00001
 % Next the SigEdges with pValue <= 1e-9 are extracted and saved to a file named "Arabidopsis.SigEdges.1e-9.txt". 
 % This file is the same as the file "At.SigEdges.txt" within the data directory.
 i = mdl_full.SigEdges{:,4} <= 1e-9 ;
-sum(i)       % There are 980736 SigEdges with pValue <= 1e-9
+
+% There are 980736 SigEdges with pValue <= 1e-9
+sum(i)       
 writetable( mdl_full.SigEdges(i,:), "Arabidopsis.SigEdges.1e-9.txt", "Delimiter","tab")
+
 
 % Step B. Investigate how the number of training samples affects the predictor power
 mdl_eosn = explicit_eosn( tf_mtx_full, target_mtx_full, 3000)
