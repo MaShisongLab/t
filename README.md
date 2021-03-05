@@ -56,7 +56,7 @@ The resulted file `results.regulator.tfs.txt` can be opened and viewed in EXCEL.
 
 ### 2. Draw chord diagrams showing TF-target genes regulation for the modules
 
-We will use the `getChordDiagram` function in R to draw chord diagrams for the modules. This function depends on the `circlize` package. It has four input variables: `module` - the name of the module; `ratio` - the relative size of the target gene area; `tfnum` - the maximun number of TF genes to be included within the diagram; `targetnum` - the maximum number of target gennes to be included. <br><br>
+We will use the `getChordDiagram` function in R to draw chord diagrams for the modules. The function has four input variables: `module` - the name of the module; `ratio` - the relative size of the target gene area occupies; `tfnum` - the maximun number of TF genes to be included within the diagram; `targetnum` - the maximum number of target gennes to be included. The function extracts the TF-target gene pairs from the file `results.regulator.tfs.txt` for the input module, and then uses these gene pairs to draw a chord Diagram which shows the TF-target genes regulation. The `circlize` package is required for the analysis.<br><br>
 Open an R console and set working directory to the directory of the EXPLICIT package. Within the R console, type in the following commands:
 ```R
 # Load the scripts that defines the getChordDiagram function.
