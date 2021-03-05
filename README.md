@@ -103,7 +103,7 @@ At.matrix.demo.h5
 ├─idx_tf_gene			(specifying TF genes used for model construction)
 ├─idx_target_gene 		(specifying target genes used for model construction)
 └─independent_samples_for_validation
-   ├───expression_log2cpm  	(2 samples [row] X 39184 genes [column])
+   ├───expression_log2cpm  	(2 samples [row] X 38194 genes [column])
    ├───gene_name		(38194 genes)
    └───sample_id		(2 samples)
    
