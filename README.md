@@ -85,15 +85,15 @@ Currently, we have only the gene expression predictor model for *Arabidopsis tha
 ```matlab
 mdl = explicit( TF_expression, TG_expression, TF_name, TG_name)
 ```
-`TF_expression`: the expression matrix for TF, with rows representing samples and columns representing genes <br>
-`TG_expression`: the expression matrix for target genes, with rows representing samples and columns representing genes <br> 
+`TF_expression`: the expression matrix for TF, with samples in rows and genes in columns  <br>
+`TG_expression`: the expression matrix for target genes, with samples in rows and genes in columns <br> 
 `TF_name`: the names of the TF genes <br>
 `TG_name`: the names of the target genes <br>
 
 Below we describe the detailed procedure to create the Arabidopsis predictor. The procedure can be adapted to analyze other custom gene expression data.
 
 #### a. Obtain the Arabidopsis gene expression matrix
-Download two matrices `At.matrix.demo.h5` and `At.matrix.full.h5` from [Figshare](https://figshare.com/s/0c838ad4ef6a764daf53) (https://figshare.com/s/0c838ad4ef6a764daf53) , and place them within the <b>root directory of the EXPLICIT package </b>. `At.matrix.full.h5` is a full matrix with 24545 samples, while `At.matrix.demo.h5` has 5000 randomly selected samples from the full matrix. <i>We recommend to work with the smaller matrix `At.matrix.demon.h5` first</i>, as it requires less computational resources. Both are hdf5 format files with the following data structure: 
+Download two matrices `At.matrix.demo.h5` and `At.matrix.full.h5` from [Figshare](https://figshare.com/s/0c838ad4ef6a764daf53) (https://figshare.com/s/0c838ad4ef6a764daf53) , and place them within the <b>root directory of the EXPLICIT package </b>. We parpared these two matrices by compiling publically avaiable RNA-Seq datasets, and used them to train the Arabidopsis preidictor. `At.matrix.full.h5` is a full matrix with 24545 samples, while `At.matrix.demo.h5` has 5000 randomly selected samples from the full matrix. <i>We recommend to work with the smaller matrix `At.matrix.demon.h5` first</i>, as it requires less computational resources. Both are hdf5 format files with the following data structure: 
 ```bash
 At.matrix.demo.h5
 ├─expression_log2cpm  		(5000 samples [row] X 38194 genes [column])
