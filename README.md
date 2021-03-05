@@ -31,7 +31,7 @@ Once the required software is installed, just download or clone the whole packag
 ### 1. Infer TF regulators for gene modules
 
 #### a. Prepare the module file
-The file used to store gene modules information is `modules_to_analyze.txt`. It is preloaded with 1,085 gene modules identified from a GGM gene co-expression network described in the paper by [Geng et al.](https://github.com/MaShisongLab/explicit#Reference). The following analysis will proceed with these preloaded modules. On the other hand, you can also edit the file, replacing these modules with your own ones. The file has the following format, with the first column being gene ids and the second column being module names. The two columns are separated by a tab. For gene ids, only standard Arabidopsis AGI ids are currently supported. Multiple modules can be analyzed at the same time. <i>Once finish editing, save the file without changing its name</i>.
+The file used to store gene modules information is `modules_to_analyze.txt`. It is preloaded with 1,085 gene modules identified from a GGM gene co-expression network described in the paper by [Geng et al.](https://github.com/MaShisongLab/explicit#Reference). The following analysis will proceed with these preloaded modules. On the other hand, you can also edit the file, replacing these modules with your own ones. The file has two columns separated by a tab, with the first column being gene ids and the second column being module names. For gene ids, only standard Arabidopsis AGI ids are currently supported. Multiple modules can be analyzed at the same time. <i>Once finish editing, save the file without changing its name</i>.
 ```
 Gene_Name   ModuleID
 AT1G25360   Module138
@@ -59,9 +59,9 @@ The resulted file `results.regulator.tfs.txt` can be opened and viewed in EXCEL.
 We will use the `getChordDiagram` function in R to draw chord diagrams for the modules. The function extracts the TF-target gene pairs from the file `results.regulator.tfs.txt` for the input module, and then uses these gene pairs to draw a chord Diagram accordingly. It has four input variables:<br>
 `module` - the name of the module <br>`ratio` - the relative size of the target gene area occupies <br>`tfnum` - the maximun number of TF genes to be included within the diagram <br>`targetnum` - the maximum number of target gennes to be included.<br><br>
 
-Open an R console and set the working directory to the directory of the EXPLICIT package. Within the R console, type in the following commands:
+Open an R console and set the working directory to the home directory of the EXPLICIT package. Within the R console, type in the following commands:
 ```R
-# Load the scripts that defines the getChordDiagram function.
+# Load the scripts that define the getChordDiagram function.
 source("Rscripts.R")  
 
 # The function requires the 'circlize' package
@@ -81,9 +81,9 @@ getChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
 Here are some output diagrams:
 
 ### 3. Create custom gene expression predictor 
-Currently, we have only the gene expression predictor model for *Arabidopsis thaliana*. We are working on predictor models for other species. At the same time, you can also create your won custom gene expression predictor. However, a large number of training samples are required for training the model. The number should be at least 5 - 10 times larger than the number of input TFs.
+Currently, we have only the gene expression predictor model for *Arabidopsis thaliana*. We are working on predictor models for other species. At the same time, you can also create your own custom gene expression predictor. However, a large number of training samples are required for training the model. <br>
 
-The MATLAB function <B>explicit</B>, as specified within the file "explicit.m", will be used to create the model. The file can be found within the root folder of the package. MATLAB is required for this analysis.
+The MATLAB function <B>explicit</B>, as specified within the file "explicit.m", is used to create the predictor model. The file can be found within the home folder of the package. MATLAB is required for this analysis. The function has the following syntax:
 ```matlab
 mdl = explicit( TF_expression, TG_expression, TF_name, TG_name)
 ```
@@ -92,7 +92,7 @@ mdl = explicit( TF_expression, TG_expression, TF_name, TG_name)
 `TF_name`: the names of the TF genes <br>
 `TG_name`: the names of the target genes <br>
 
-Here is a detailed procedure to create the Arabidopsis predictor.
+Below we describe the detailed procedure to create the Arabidopsis predictor. The procedure can be adapted to analyze other custom gene expression data.
 
 #### a. Obtain the Arabidopsis gene expression matrix
 Download two matrices `At.matrix.demo.h5` and `At.matrix.full.h5` from [Figshare](https://figshare.com/s/0c838ad4ef6a764daf53) (https://figshare.com/s/0c838ad4ef6a764daf53) , and place them within the <b>root directory of the EXPLICIT package </b>. `At.matrix.full.h5` is a full matrix with 24545 samples, while `At.matrix.demo.h5` has 5000 randomly selected samples from the full matrix. <i>We recommend to work with the smaller matrix `At.matrix.demon.h5` first</i>, as it requires less computational resources. Both are hdf5 format files with the following data structure: 
