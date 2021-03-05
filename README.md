@@ -56,80 +56,27 @@ The resulted file `results.regulator.tfs.txt` can be opened and viewed in EXCEL.
 
 ### 2. Draw chord diagrams showing TF-target genes regulation for the modules
 
-We will use the `getChordDiagram` function in R to draw chord diagrams for the modules. This function depends on the `circlize` package. <br>
-Usage:  getChordDiagram ( module, ration, tfnum, targetnum)
-      `moudle` - the name of the module
-      `ratio`  - the relative size of target gene area occupies
-      `tfnum`  - the maximum number of TFs genes to be included within the chord diagram
-      `targetnum` - the maximu number of target genes to be included within the chord diagram
-      
+We will use the `getChordDiagram` function in R to draw chord diagrams for the modules. This function depends on the `circlize` package. It has four input variables: `module` - the name of the module; `ratio` - the relative size of the target gene area; `tfnum` - the maximun number of TF genes to be included within the diagram; `targetnum` - the maximum number of target gennes to be included. <br><br>
 Open an R console and set working directory to the directory of the EXPLICIT package. Within the R console, type in the following commands:
 ```R
+# Load the scripts that defines the getChordDiagram function.
 source("Rscripts.R")  
+
+# The function requires the 'circlize' package
 library("circlize")
 
-# To draw diagram for Module0105
-directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
+# To draw a diagram for Module0105
+getChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
 
-# For other modules
-directChordDiagram( module="Module0084", ratio = 1, tfnum = 50, targetnum = 15)
-directChordDiagram( module="Module0081", ratio = 1, tfnum = 50, targetnum = 15)
-directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
+# Change the relative size of the target gene area
+getChordDiagram( module="Module0105", ratio = 0.5, tfnum = 50, targetnum = 15)
+
+# To draw diagrams for other modules
+getChordDiagram( module="Module0084", ratio = 1, tfnum = 50, targetnum = 15)
+getChordDiagram( module="Module0081", ratio = 1, tfnum = 50, targetnum = 15)
+getChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
 ```
-
-#### c. Use a single command in R to draw the diagram
-Open an R console and navigate to the home directory of the explicit package, which contains the `chord.lists.txt` file. Within the R console, type the following commands:
-The function `directChordDiagram` can also be used to draw chord digrams via a single command.
-```R
-source("Rscripts.R")  
-library("circlize")
-
-# To draw diagram for Module0105
-directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
-
-# For other modules
-directChordDiagram( module="Module0084", ratio = 1, tfnum = 50, targetnum = 15)
-directChordDiagram( module="Module0081", ratio = 1, tfnum = 50, targetnum = 15)
-directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
-```
-`tfnum` and `targetnum` specify, respectively, the maximum number of TFs and target genes to be included within the chord Diagram.
-
-
-#### a. Obtain the chord-list file for a module of interest
-The Perl script `getChordLists.pl` will extract the TF-target gene pairs from the `results.regulator.tfs.txt` for the module specified. The results are outputted to a file named `chord.lists.txt`, which will be used in the next step to draw a chord diagram. 
-```shell
-# The command line format is :  perl getChordLists.pl XXXXXXX, where XXXXXX is the name of the module.
-# For example, to extract chord-list file for Module0105
-perl getChordLists.pl Module0105
-```
-For other module, just replace `Module0105` with the name of that module.
-
-#### b. Draw the chord diagram according to the chord-list in R
-The function `drawChordDiagram` will be used to draw the chord diagram in R. It has two inputs: `chordfile` specifyies the name of the chord-list file, `ratio` specifies the relative size of target gene area occupies. The function requires the `circlize` package. <br><br>
-Open an R console and navigate to the home directory of the explicit package, which contains the `chord.lists.txt` file. Within the R console, type the following commands:
-```R
-source("Rscripts.R")   # Contains scripts for the drawChordDiagram function.
-library("circlize")
-drawChordDiagram(chordfile = "chord.lists.txt", ratio = 1)
-drawChordDiagram(chordfile = "chord.lists.txt", ratio = 0.6)
-```
-Repeat step <b>a</b> and <b>b</b> to draw diagrams for other modules.
-
-#### c. Use a single command in R to draw the diagram
-The function `directChordDiagram` can also be used to draw chord digrams via a single command.
-```R
-source("Rscripts.R")  
-library("circlize")
-
-# To draw diagram for Module0105
-directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
-
-# For other modules
-directChordDiagram( module="Module0084", ratio = 1, tfnum = 50, targetnum = 15)
-directChordDiagram( module="Module0081", ratio = 1, tfnum = 50, targetnum = 15)
-directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
-```
-`tfnum` and `targetnum` specify, respectively, the maximum number of TFs and target genes to be included within the chord Diagram.
+Here are some output diagrams:
 
 ### 3. Create custom gene expression predictor 
 Currently, we have only the gene expression predictor model for *Arabidopsis thaliana*. We are working on predictor models for other species. At the same time, you can also create your won custom gene expression predictor. However, a large number of training samples are required for training the model. The number should be at least 5 - 10 times larger than the number of input TFs.
