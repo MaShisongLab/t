@@ -56,7 +56,7 @@ The resulted file `results.regulator.tfs.txt` can be opened and viewed in EXCEL.
 
 ### 2. Draw chord diagrams showing TF-target genes regulation for the modules
 
-We will use the `getChordDiagram` function in R to draw chord diagrams for the modules. The function extracts the TF-target gene pairs from the file `results.regulator.tfs.txt` for the input module, and then uses these gene pairs to draw a chord Diagram accordingly. It has four input variables:<br>
+The `getChordDiagram` function will be used to draw chord diagrams for the modules in R. The function extracts the TF-target gene pairs from the file `results.regulator.tfs.txt` for the input module, and then uses these gene pairs to draw a chord Diagram accordingly. It has four input variables:<br>
 `module` - the name of the module <br>`ratio` - the relative size of the target gene area occupies <br>`tfnum` - the maximun number of TF genes to be included within the diagram <br>`targetnum` - the maximum number of target gennes to be included.<br><br>
 
 Open an R console and set the working directory to the home directory of the EXPLICIT package. Within the R console, type in the following commands:
@@ -81,9 +81,7 @@ getChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
 Here are some output diagrams:
 
 ### 3. Create custom gene expression predictor 
-Currently, we have only the gene expression predictor model for *Arabidopsis thaliana*. We are working on predictor models for other species. At the same time, you can also create your own custom gene expression predictor. However, a large number of training samples are required for training the model. <br>
-
-The MATLAB function <B>explicit</B>, as specified within the file "explicit.m", is used to create the predictor model. The file can be found within the home folder of the package. MATLAB is required for this analysis. The function has the following syntax:
+Currently, we have only the gene expression predictor model for *Arabidopsis thaliana*. We are working on predictor models for other species. At the same time, you can also create your own custom gene expression predictor (<i>Note: a large number of training samples are required for training the model</i>). The MATLAB function <B>`explicit`</B>, as specified within the file `explicit.m`, is used to create the predictor model. The file can be found within the home folder of the package. MATLAB is required for this analysis. The function has the following syntax:
 ```matlab
 mdl = explicit( TF_expression, TG_expression, TF_name, TG_name)
 ```
