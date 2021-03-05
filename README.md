@@ -118,10 +118,11 @@ At.matrix.full.h5
    └───sample_id		(2 samples)
 ```
 #### b. Create the expression predictor
-Conduct the following analysis within a MATLAB console.
+The following analysis builds an gene expression predictor model using the smaller matrix. The analysis is conducted within a MATLAB console. 
 ```matlab
 % navigate to and start within the home directory of the EXPLICIT package.
-% obtain the expression matrix and gene names for from At.matrix.demo.h5.
+
+% obtain the expression matrix and gene names for from At.matrix.demo.h5. 
 % the matrix contains 5000 samples (in rows) and 38194 genes (in columns)
 mtx_demo = h5read("At.matrix.demo.h5","/expression_log2cpm");
 gene_name = h5read("At.matrix.demo.h5","/gene_name");
