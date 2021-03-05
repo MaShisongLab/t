@@ -353,28 +353,24 @@ clearvars ;
 mtx_full = h5read("At.matrix.full.h5","/expression_log2cpm");
 gene_name = h5read("At.matrix.full.h5","/gene_name");
 
-% which of the 31984 genes are TFs to be used
 itf = h5read("At.matrix.full.h5","/idx_tf_gene") == 1;   
-
-% target genes to be used
 itarget = h5read("At.matrix.full.h5","/idx_target_gene") == 1;  
 
-% obtain the TF expression matrix
 tf_mtx_full = mtx_full(:,itf);    
+target_mtx_full = mtx_full(:,itarget);   
 
-% obtain the target gene expression matrix
-target_mtx_full = mtx_full(:,itarget);                      
 tf_name = gene_name(itf);
 target_name = gene_name(itarget);
 
-% this produces the predictor model.
+% This produces the predictor model.
 mdl_full = explicit( tf_mtx_full, target_mtx_full, tf_name, target_name); 
 mdl_full    
 
 % The predictor has 3298936  SigEdges (TF-target gene pairs) with pValue <= 0.00001
 % Next the SigEdges with pValue <= 1e-9 are extracted and saved to a file named "Arabidopsis.SigEdges.1e-9.txt". 
 % This file is the same as the file "At.SigEdges.txt" within the data directory.
-% There are 980736 SigEdges with pValue <= 1e-9
+% There are 980736 SigEdges with pValue <= 1e-9. 
+% These SigEdges are also the same SigEdges reported in the paper by Geng et al.
 i = mdl_full.SigEdges{:,4} <= 1e-9 ;
 sum(i)       
 writetable( mdl_full.SigEdges(i,:), "Arabidopsis.SigEdges.1e-9.txt", "Delimiter","tab")
