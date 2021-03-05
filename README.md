@@ -127,10 +127,10 @@ The following analysis builds an gene expression predictor model using the small
 mtx_demo = h5read("At.matrix.demo.h5","/expression_log2cpm");
 gene_name = h5read("At.matrix.demo.h5","/gene_name");
 
-% which of the 38194 genes are TFs to be used
+% which of the 38194 genes are TFs to be used.  1678 TFs are selected
 itf = h5read("At.matrix.demo.h5","/idx_tf_gene") == 1; 	
 
-% which of the 38194 genes are target genes to be used
+% which of the 38194 genes are target genes to be used. 29182 target genes are selected.
 itarget = h5read("At.matrix.demo.h5","/idx_target_gene") == 1; 	
 
 % obtain the TF expression matrix, target gene expression matrix
