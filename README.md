@@ -42,17 +42,39 @@ AT4G12350   Module139
 .........   ........
 ```
 #### b. Conduct enrichment assay to identify TF regulators for the modules
-The Perl script `getArabidopsisRegulatorTFs.pl` will do the job. It takes the modules from the file `modules_to_analyze.txt` to conduct an enrichment assay to identify potential TF regulators. Results are outputted to a file named `results.regulator.tfs.txt`, which can be open in EXCEL.
+The Perl script `getArabidopsisRegulatorTFs.pl` will do the job. It takes the modules from the file `modules_to_analyze.txt` to conduct an enrichment assay to identify potential TF regulators. Results are saved to a file named `results.regulator.tfs.txt`.
 
-The command to use:
+Open a command line window or shell terminal, navigate to the home directory of the EXPLICIT package, and type in the following commmand:
 ```shell
 perl getArabidopsisRegulatorTFs.pl
 ```
-Here is an example of the output results:
+
+The resulted file `results.regulator.tfs.txt` can be opened and viewed in EXCEL. It lists potential TF regulators for every input modules. Here is an example: 
+
 ![alt-text](./data/results_sample.png "Output result example")
 
 
 ### 2. Draw chord diagrams showing TF-target genes regulation for the modules
+
+
+#### c. Use a single command in R to draw the diagram
+Open an R console and navigate to the home directory of the explicit package, which contains the `chord.lists.txt` file. Within the R console, type the following commands:
+The function `directChordDiagram` can also be used to draw chord digrams via a single command.
+```R
+source("Rscripts.R")  
+library("circlize")
+
+# To draw diagram for Module0105
+directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
+
+# For other modules
+directChordDiagram( module="Module0084", ratio = 1, tfnum = 50, targetnum = 15)
+directChordDiagram( module="Module0081", ratio = 1, tfnum = 50, targetnum = 15)
+directChordDiagram( module="Module0105", ratio = 1, tfnum = 50, targetnum = 15)
+```
+`tfnum` and `targetnum` specify, respectively, the maximum number of TFs and target genes to be included within the chord Diagram.
+
+
 #### a. Obtain the chord-list file for a module of interest
 The Perl script `getChordLists.pl` will extract the TF-target gene pairs from the `results.regulator.tfs.txt` for the module specified. The results are outputted to a file named `chord.lists.txt`, which will be used in the next step to draw a chord diagram. 
 ```shell
