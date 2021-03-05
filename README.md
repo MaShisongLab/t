@@ -30,7 +30,7 @@ Once the required software is installed, just download or clone the whole packag
 
 ### 1. Infer TF regulators for gene modules
 
-#### 1). Prepare the module file
+#### (1). Prepare the module file
 The file used to store gene modules information is `modules_to_analyze.txt`. It is preloaded with 1,085 gene modules identified from a gene co-expression network described in the paper by [Geng <i>et al.</i>](https://github.com/MaShisongLab/explicit#Reference). The following analysis will proceed with these preloaded modules. On the other hand, you can also edit the file, replacing these modules with your own ones. The file has two tab-separated columns, with the first column being gene ids and the second being module names. For gene ids, only standard Arabidopsis AGI ids are supported. Multiple modules can be analyzed at the same time. <i>Once finish editing, save the file without changing its name</i>.
 ```
 Gene_Name   ModuleID
@@ -41,7 +41,7 @@ AT2G22130   Module139
 AT4G12350   Module139
 .........   ........
 ```
-#### 2). Conduct enrichment assay to identify TF regulators for the modules
+#### (2). Conduct enrichment assay to identify TF regulators for the modules
 The Perl script `getArabidopsisRegulatorTFs.pl` will do the job. It takes the modules from the file `modules_to_analyze.txt` to conduct enrichment assays to identify potential TF regulators. Results are saved to a file named `results.regulator.tfs.txt`.
 
 Open a command line window or shell terminal, navigate to the home directory of the EXPLICIT package, and type in the following command:
@@ -92,7 +92,7 @@ explicit( TF_expression, TG_expression, TF_name, TG_name)
 
 Below we describe the detailed procedure to create the Arabidopsis predictor. The procedure can be adapted to analyze other custom gene expression data.
 
-#### 1). Obtain the Arabidopsis gene expression matrix
+#### (1). Obtain the Arabidopsis gene expression matrix
 Download two matrices `At.matrix.demo.h5` and `At.matrix.full.h5` from [Figshare](https://figshare.com/s/0c838ad4ef6a764daf53) (https://figshare.com/s/0c838ad4ef6a764daf53) , and place them within the <b>home folder of the EXPLICIT package </b>. We prepared these two matrices by compiling publically available RNA-Seq datasets from NCBI, and used them to train the Arabidopsis predictor. `At.matrix.full.h5` is a full matrix with 24545 samples, while `At.matrix.demo.h5` has 5000 randomly selected samples from the full matrix. <i>We recommend to work with the smaller matrix `At.matrix.demon.h5` first</i>, as it requires less computational resources. Both matrices are saved in hdf5 file format, with the following data structure. Note that both files also contain an additional matrix with independent samples for validation. 
 ```bash
 At.matrix.demo.h5
@@ -117,7 +117,7 @@ At.matrix.full.h5
    ├───gene_name		(38194 genes)
    └───sample_id		(2 samples)
 ```
-#### 2). Create the expression predictor
+#### (2). Create the expression predictor
 The following analysis builds a gene expression predictor model using the smaller matrix. The analysis is conducted within a MATLAB console. 
 ```matlab
 % Navigate to and start within the home directory of the EXPLICIT package.
@@ -181,7 +181,7 @@ mdl_demo.SigEdges(1:5,:) =
     "AT1G01020"    "AT1G30490"     0.0908     1.053e-06 
     "AT1G01020"    "AT2G01060"     0.1191     7.535e-06 
 ```
-#### 3). Use the predictor model to predict independent samples
+#### (3). Use the predictor model to predict independent samples
 We have generated two independent RNA-Seq datasets from Arabidopsis shoot and root samples. These two datasets were not used in the model training. Below we test how well the predictor model predict these two samples. <i>Note: the order of the gene names within the test samples are the same as those within the demo matrix. </i> 
 ```matlab
 % Obtain expression matrix for the test samples
@@ -208,7 +208,7 @@ NRMSE = sqrt(sum(residual_mtx.^2, 2) ./ sum( actual_target_mtx.^2, 2))
 ```
 <b>Note: If you want to use your own RNA-Seq datasets to test the model, make sure the gene names matched in the same order to the gene names of the TF and target gene matrices used above, and the gene expression value should be log2 transformed (log2(CPM + 1)). Alternatively, you can arrange the TFs and target genes of the demo matrix with the same order as your RNA-Seq datasets, and create the gene expression predictor accordingly. </b>
 
-#### 4). Investigate how the number of training samples affects the predictor power
+#### (4). Investigate how the number of training samples affects the predictor power
 The number of training samples affects the predictor's predicting power. The function <b>`explicit_eosn`</b>, standing for effect of sample number, investigates such effects. Its inputs are `(TF_expression, Target_expression, TestSampleNum)`, with `TestSampleNum` being the number of samples randomly selected and hold out as test samples.
 ```matlab
 % Hold out 500 samples as test samples
@@ -241,7 +241,7 @@ The output is:
     18           4500            0.99587          0.06356       0.98441     0.12439  
 ```
 Eighteen predictor models were built with between 1700 and 4500 training samples, and the predicting accuracy on test samples (R_test) increased along with the number of training samples.
-#### 5). Perform K-fold Cross-Validation
+#### (5). Perform K-fold Cross-Validation
 K-fold Cross-Validation can be also used to test the predictor's performance. The function <b>`explicit_kfcv`</b> does the job. Its inputs are `(TF_expression, Target_expression, tf_name, target_name, repeats, folds)`, with `repeats` and `folds` being the number of repeats and the folds for the analysis.
 ```matlab
 % Perform 5 repeats of 10-fold Cross-Validation
@@ -296,7 +296,7 @@ mdl_kfcv.AllEdges(1:5,:) =
 
 ```
 `mdl_kfcv.AllEdges` can be used to check if any of the coefficient is stable or not across the CV runs.
-#### 6). Perform Cross-Validation on independent samples
+#### (6). Perform Cross-Validation on independent samples
 The function <b>`explicit_cv`</b> can be used to conduct Cross-Validation. Its inputs are `(Training_TF_expression, Training_traget_expression, Test_TF_expression, Test_target_expression, Test_sample_ids)`. The function uses the Training TF and target expression matrices to build the predictor model, and then test the model on the Test samples. It provides a covenient way to generate and test different predictor models.
 ```matlab
 test_target_mtx = test_mtx(:,itarget);
@@ -334,7 +334,7 @@ mdl_cv_5000.Test_Sample_Stat =
     'shoot'    0.99002      0.10157 
 ```
 When using 5000, 4000, 3000, or 2000 samples to train the predictor model, the mean correlation for test samples are 0.9910, 0.9891, 0.9841, 0.9572, respectively.
-#### 7). Use the full matrix to perform the analysis
+#### (7). Use the full matrix to perform the analysis
 Next we will analyze the full matrix. <i>Note: Since the matrix is large, it requires a large amount of computational resource. It is recommended to have at least 80G memory available.</i>
 ```matlab
 % clear all previous variables to free memory
