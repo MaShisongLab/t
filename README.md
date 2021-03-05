@@ -186,7 +186,7 @@ mdl_demo.SigEdges(1:5,:) =
 #### (3). Use the predictor model to predict independent samples
 We have generated two independent RNA-Seq datasets from Arabidopsis shoot and root samples. These two datasets were not used in the model training. Below we test how well the predictor model predict these two samples. <i>Note: the order of the gene names within the test samples are the same as those within the demo matrix. </i> 
 ```matlab
-% MATLAB code
+% MATLAB code - continued
 % Obtain expression matrix for the test samples
 test_mtx = h5read("At.matrix.demo.h5","/independent_samples_for_validation/expression_log2cpm");
 
@@ -214,7 +214,7 @@ NRMSE = sqrt(sum(residual_mtx.^2, 2) ./ sum( actual_target_mtx.^2, 2))
 #### (4). Investigate how the number of training samples affects the predictor power
 The number of training samples affects the predictor's predicting power. The function <b>`explicit_eosn`</b>, standing for effect of sample number, investigates such effects. Its inputs are `(TF_expression, Target_expression, TestSampleNum)`, with `TestSampleNum` being the number of samples randomly selected and hold out as test samples.
 ```matlab
-% MATLAB code
+% MATLAB code - continued
 % Hold out 500 samples as test samples
 mdl_eosn = explicit_eosn( tf_mtx_demo, target_mtx_demo, 500) 
 mdl_eosn
@@ -248,7 +248,7 @@ Eighteen predictor models were built with between 1700 and 4500 training samples
 #### (5). Perform K-fold Cross-Validation
 K-fold Cross-Validation can be also used to test the predictor's performance. The function <b>`explicit_kfcv`</b> does the job. Its inputs are `(TF_expression, Target_expression, tf_name, target_name, repeats, folds)`, with `repeats` and `folds` being the number of repeats and the folds for the analysis.
 ```matlab
-% MATLAB code
+% MATLAB code - continued
 % Perform 5 repeats of 10-fold Cross-Validation
 mdl_kfcv = explicit_kfcv(tf_mtx_demo, target_mtx_demo, tf_name, target_name, 5, 10) 
 mdl_kfcv
@@ -304,7 +304,7 @@ mdl_kfcv.AllEdges(1:5,:) =
 #### (6). Perform Cross-Validation on independent samples
 The function <b>`explicit_cv`</b> can be used to conduct Cross-Validation. Its inputs are `(Training_TF_expression, Training_traget_expression, Test_TF_expression, Test_target_expression, Test_sample_ids)`. The function uses the Training TF and target expression matrices to build the predictor model, and then test the model on the Test samples. It provides a covenient way to generate and test different predictor models.
 ```matlab
-% MATLAB code
+% MATLAB code - continued
 
 test_target_mtx = test_mtx(:,itarget);
 
