@@ -31,7 +31,7 @@ Once the required software is installed, just download or clone the whole packag
 ### 1. Infer TF regulators for gene modules
 
 #### a. Prepare the module file
-The file used to store gene modules information is `modules_to_analyze.txt`. It is preloaded with 1,085 gene modules identified from a GGM gene co-expression network described in the paper by [Geng et al.](https://github.com/MaShisongLab/explicit#Reference). The following analysis will proceed with these preloaded modules. On the other hand, you can also edit the file, replacing these modules with your own ones. The file has two tab-sepatated columns, with the first column being gene ids and the second column being module names. For gene ids, only standard Arabidopsis AGI ids are currently supported. Multiple modules can be analyzed at the same time. <i>Once finish editing, save the file without changing its name</i>.
+The file used to store gene modules information is `modules_to_analyze.txt`. It is preloaded with 1,085 gene modules identified from a GGM gene co-expression network described in the paper by [Geng <i>et al.</i>](https://github.com/MaShisongLab/explicit#Reference). The following analysis will proceed with these preloaded modules. On the other hand, you can also edit the file, replacing these modules with your own ones. The file has two tab-sepatated columns, with the first column being gene ids and the second being module names. For gene ids, only standard Arabidopsis AGI ids are supported. Multiple modules can be analyzed at the same time. <i>Once finish editing, save the file without changing its name</i>.
 ```
 Gene_Name   ModuleID
 AT1G25360   Module138
@@ -93,7 +93,7 @@ explicit( TF_expression, TG_expression, TF_name, TG_name)
 Below we describe the detailed procedure to create the Arabidopsis predictor. The procedure can be adapted to analyze other custom gene expression data.
 
 #### a. Obtain the Arabidopsis gene expression matrix
-Download two matrices `At.matrix.demo.h5` and `At.matrix.full.h5` from [Figshare](https://figshare.com/s/0c838ad4ef6a764daf53) (https://figshare.com/s/0c838ad4ef6a764daf53) , and place them within the <b>home directory of the EXPLICIT package </b>. We parpared these two matrices by compiling publically avaiable RNA-Seq datasets, and used them to train the Arabidopsis preidictor. `At.matrix.full.h5` is a full matrix with 24545 samples, while `At.matrix.demo.h5` has 5000 randomly selected samples from the full matrix. <i>We recommend to work with the smaller matrix `At.matrix.demon.h5` first</i>, as it requires less computational resources. Both are hdf5 format files with the following data structure: 
+Download two matrices `At.matrix.demo.h5` and `At.matrix.full.h5` from [Figshare](https://figshare.com/s/0c838ad4ef6a764daf53) (https://figshare.com/s/0c838ad4ef6a764daf53) , and place them within the <b>home folder of the EXPLICIT package </b>. We parpared these two matrices by compiling publically avaiable RNA-Seq datasets from NCBI, and used them to train the Arabidopsis predictor. `At.matrix.full.h5` is a full matrix with 24545 samples, while `At.matrix.demo.h5` has 5000 randomly selected samples from the full matrix. <i>We recommend to work with the smaller matrix `At.matrix.demon.h5` first</i>, as it requires less computational resources. Both matrices are saved in hdf5 file format, with the following data structure. Note that both files also contain an additional matrix with independent samples for validation. 
 ```bash
 At.matrix.demo.h5
 ├─expression_log2cpm  		(5000 samples [row] X 38194 genes [column])
@@ -118,7 +118,7 @@ At.matrix.full.h5
    └───sample_id		(2 samples)
 ```
 #### b. Create the expression predictor
-The following analysis builds an gene expression predictor model using the smaller matrix. The analysis is conducted within a MATLAB console. 
+The following analysis builds a gene expression predictor model using the smaller matrix. The analysis is conducted within a MATLAB console. 
 ```matlab
 % navigate to and start within the home directory of the EXPLICIT package.
 
@@ -127,10 +127,10 @@ The following analysis builds an gene expression predictor model using the small
 mtx_demo = h5read("At.matrix.demo.h5","/expression_log2cpm");
 gene_name = h5read("At.matrix.demo.h5","/gene_name");
 
-% which of the 38194 genes are TFs to be used.  1678 TFs are selected
+% itf specifies which of the 38194 genes are TFs to be used.  1678 TFs are selected in total.
 itf = h5read("At.matrix.demo.h5","/idx_tf_gene") == 1; 	
 
-% which of the 38194 genes are target genes to be used. 29182 target genes are selected.
+% itarget specifies which of the 38194 genes are target genes to be used. 29182 target genes are selected in total.
 itarget = h5read("At.matrix.demo.h5","/idx_target_gene") == 1; 	
 
 % obtain the TF expression matrix, target gene expression matrix
@@ -144,10 +144,10 @@ target_name = gene_name(itarget);
 % produce the predictor model
 mdl_demo = explicit( tf_mtx_demo, target_mtx_demo, tf_name, target_name);
 
-% A look into the predictor model
+% take a look into the predictor model
 mdl_demo 	
 
-% The first 5 significant TF-target gene pairs
+% the first 5 significant TF-target gene pairs
 mdl_demo.SigEdges(1:5,:)  
 ```
 
