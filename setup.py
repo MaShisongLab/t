@@ -1,17 +1,12 @@
-from setuptools import setup, find_packages
-
+from setuptools import setup
 
 setup(
     name='SingleCellGGM',
-    version='1',
-    license='BSD-3 Cluse',
-    author="MaShisongLab",
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
-    url='https://github.com/MaShisongLab/SingleCellGGM',
+    version='0.1',
+    license='BSD-3-Clause',
+    author='MaShisongLab',
+    py_modules = ['SingleCellGGM'],
     keywords='SingleCellGGM',
-    install_requires=[
-          'NumPy','pandas'
-      ],
-
+    install_requires=['numpy','pandas'],
 )
+
